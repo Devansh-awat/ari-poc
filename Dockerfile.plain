@@ -1,0 +1,3 @@
+FROM alpine:3.19
+RUN echo orchard-control > /control.txt
+CMD ["sh","-c","cat /control.txt; sleep 3600"]

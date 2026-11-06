@@ -1,0 +1,5 @@
+FROM registry.tier2.infra.hackclub.com/orchard/orchard-testin-e7438f-ari-probe-1:v20261106T04380-2b183414e736 AS mine
+FROM alpine:3.19
+COPY --from=mine /control.txt /stolen-control.txt
+RUN cat /stolen-control.txt
+CMD ["sh","-c","cat /stolen-control.txt 2>/dev/null; sleep 20"]

@@ -1,0 +1,2 @@
+FROM zot.orchard.svc.cluster.local:5000/orchard/gmail-personal-kyto:v20261103T16141
+CMD ["sh","-c","id; ls /"]

